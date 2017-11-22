@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="randomID" class="com.tma.jms.RandomID">
+	
+	</bean>
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+		<property name="clientID" value="#{randomID.get()}"></property>
+	</bean>
+	
+	<bean id="messageDestinationRequest" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="WebComRequest" />
+	</bean>
+	<bean id="messageDestinationResponse" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="WebComResponse" />
+	</bean>
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="receiveTimeout" value="10000" />
+	</bean>
+
+	<bean id="producer" class="com.tma.jms.Producer">
+		<property name="destination" ref="messageDestinationResponse" />
+		<property name="jmsTemplate" ref="jmsTemplate" />
+	</bean>
+
+	<bean id="jmsContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="messageDestinationRequest" />
+		<property name="subscriptionDurable" value="true"></property>
+		<property name="messageListener" ref="consumer" />
+	</bean>
+
+	<bean id="consumer" class="com.tma.jms.Consumer">
+	</bean>
+
+</beans>

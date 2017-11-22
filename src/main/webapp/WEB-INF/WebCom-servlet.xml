@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- Those lines if incorrected make a red line Error apear and Nested Exception 
+		in xml file. Just adjust the dependencies and all will be fine -->
+
+	<context:component-scan base-package="com.tma.controller, com.tma.ref, com.tma.security" />
+
+	<context:annotation-config />
+	<!-- This line create beans in MyBeans.class and anothers before exectuting 
+		anny controller -->
+	<!--mvc:default-servlet-handler / -->
+	<mvc:annotation-driven />
+	<!-- This line is required -->
+
+</beans>
